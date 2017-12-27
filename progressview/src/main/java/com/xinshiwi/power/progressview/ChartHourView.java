@@ -90,6 +90,8 @@ public class ChartHourView extends View {
         }
     }
 
+
+    
     private void drawInBarLine(Canvas canvas, Rect rect, int index) {
         for (Integer i : selectIndex) {
             if (i == index) {
