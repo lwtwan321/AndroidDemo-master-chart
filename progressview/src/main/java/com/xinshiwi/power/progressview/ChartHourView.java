@@ -82,7 +82,7 @@ public class ChartHourView extends View {
             drawInBarLine(canvas, rangeRect[j], j);
             j++;
 
-            mPaint.setColor(Color.RED);
+            mPaint.setColor(Color.GRAY);
             int lineY = rect.bottom - rh / 2;
             lineXoffset = mBound.width() + 30;
             mPaint.setStrokeWidth(strokeWidth);
@@ -90,8 +90,6 @@ public class ChartHourView extends View {
         }
     }
 
-
-    
     private void drawInBarLine(Canvas canvas, Rect rect, int index) {
         for (Integer i : selectIndex) {
             if (i == index) {
