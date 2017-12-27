@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.xinshiwi.power.progressview.MainActivity">
 
@@ -14,9 +15,22 @@
     <!--app:layout_constraintLeft_toLeftOf="parent"-->
     <!--app:layout_constraintRight_toRightOf="parent"-->
     <!--app:layout_constraintTop_toTopOf="parent"/>-->
-    <TextView
+    <com.jeek.calendar.widget.calendar.WeekBarView
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="50dp" />
+
+    <com.jeek.calendar.widget.calendar.week.WeekCalendarView
+        android:id="@+id/wcvCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/week_calendar_height"
+        android:background="@color/calendar_bg_color"
+        android:overScrollMode="never"
+        app:week_day_text_size="@integer/calendar_text_size"
+        app:week_holiday_color="@color/holiday_text_color"
+        app:week_selected_circle_color="@color/select_circle_color"
+        app:week_show_holiday_hint="true"
+        app:week_show_lunar="true"
+        app:week_show_task_hint="true"/>
 
     <com.xinshiwi.power.progressview.ChartHourView
         android:id="@+id/sss"
