@@ -1,16 +1,16 @@
-package com.jimmy.common.data;
+package common.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jimmy.common.bean.EventSet;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import common.bean.EventSet;
 
 /**
  * Created by Jimmy on 2016/10/11 0011.

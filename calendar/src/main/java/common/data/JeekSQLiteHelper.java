@@ -1,4 +1,4 @@
-package com.jimmy.common.data;
+package common.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

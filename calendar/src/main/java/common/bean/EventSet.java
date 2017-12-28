@@ -1,4 +1,4 @@
-package com.jimmy.common.bean;
+package common.bean;
 
 import java.io.Serializable;
 

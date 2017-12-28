@@ -1,14 +1,14 @@
-package com.jimmy.common.data;
+package common.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.jimmy.common.bean.Schedule;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import common.bean.Schedule;
 
 /**
  * Created by Jimmy on 2016/10/11 0011.

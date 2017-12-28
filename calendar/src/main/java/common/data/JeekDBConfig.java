@@ -1,4 +1,4 @@
-package com.jimmy.common.data;
+package common.data;
 
 /**
  * Created by Jimmy on 2016/10/11 0011.

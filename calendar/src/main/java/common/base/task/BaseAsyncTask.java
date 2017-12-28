@@ -1,9 +1,9 @@
-package com.jimmy.common.base.task;
+package common.base.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.jimmy.common.listener.OnTaskFinishedListener;
+import common.listener.OnTaskFinishedListener;
 
 /**
  * Created by Jimmy on 2016/8/24 0024.

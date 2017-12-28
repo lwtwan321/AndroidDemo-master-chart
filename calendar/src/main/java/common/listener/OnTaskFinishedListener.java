@@ -1,4 +1,4 @@
-package com.jimmy.common.listener;
+package common.listener;
 
 /**
  * Created by Jimmy on 2016/8/24 0024.
