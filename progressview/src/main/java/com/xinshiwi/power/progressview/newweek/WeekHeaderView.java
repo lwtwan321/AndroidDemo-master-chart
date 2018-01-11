@@ -107,9 +107,9 @@ public class WeekHeaderView extends View {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Calendar newSelectedDay = getDateFromPoint(e.getX(), e.getY());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy MM dd", Locale.getDefault());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
             if (null != newSelectedDay)
-                Toast.makeText(mContext, "time =====" + format.format(newSelectedDay.getTime()), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "你选择了" + format.format(newSelectedDay.getTime()), Toast.LENGTH_LONG).show();
             if (null != newSelectedDay && mDateSelectedChangeListener != null) {
                 mDateSelectedChangeListener.onDateSelectedChange(mSelectedDay, newSelectedDay);
             }
