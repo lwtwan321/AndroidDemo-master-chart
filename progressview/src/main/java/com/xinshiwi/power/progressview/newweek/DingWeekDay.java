@@ -11,12 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,12 +64,33 @@ public class DingWeekDay extends View {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (mEventRects != null && eventClickListener != null) {
+                List<DingWeekDay.EventRect> reversedEventRects = mEventRects;
+                Collections.reverse(reversedEventRects);
+                for (DingWeekDay.EventRect event : reversedEventRects) {
+                    if (event.rectF != null && e.getX() > event.rectF.left && e.getX() < event.rectF.right && e.getY() > event.rectF.top && e.getY() < event.rectF.bottom) {
+                        eventClickListener.onEventClick(event.event, event.rectF);
+                        return super.onSingleTapConfirmed(e);
+                    }
+                }
+            }
             return super.onSingleTapConfirmed(e);
         }
 
         @Override
         public void onLongPress(MotionEvent e) {
             super.onLongPress(e);
+            if (eventLongPressListener != null && mEventRects != null) {
+                List<DingWeekDay.EventRect> reversedEventRects = mEventRects;
+                Collections.reverse(reversedEventRects);
+                for (DingWeekDay.EventRect event : reversedEventRects) {
+                    if (event.rectF != null && e.getX() > event.rectF.left && e.getX() < event.rectF.right && e.getY() > event.rectF.top && e.getY() < event.rectF.bottom) {
+                        eventLongPressListener.onEventLongPress(event.event, event.rectF);
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        return;
+                    }
+                }
+            }
         }
     };
 
@@ -111,6 +134,17 @@ public class DingWeekDay extends View {
     private int mHeaderColumnBackgroundColor = Color.WHITE;
 
     private Paint mEventBackgroundPaint;
+
+    private EventClickListener eventClickListener;
+    private EventLongPressListener eventLongPressListener;
+
+    public void setEventClickListener(EventClickListener eventClickListener) {
+        this.eventClickListener = eventClickListener;
+    }
+
+    public void setEventLongPressListener(EventLongPressListener eventLongPressListener) {
+        this.eventLongPressListener = eventLongPressListener;
+    }
 
     public int getTotalHour() {
         return endHour + 1 - beginHour;
@@ -254,7 +288,6 @@ public class DingWeekDay extends View {
         int endHour = eventRect.getEvent().getEndTime().get(Calendar.HOUR_OF_DAY);
         int endMinutes = eventRect.getEvent().getEndTime().get(Calendar.MINUTE);
 
-
         int relativePositionStart = startHour - beginHour;
         int halfHeightStart = 0;
         if (startMinutes == 30) {
@@ -384,5 +417,13 @@ public class DingWeekDay extends View {
         public void setBottom(float bottom) {
             this.bottom = bottom;
         }
+    }
+
+    public interface EventClickListener {
+        public void onEventClick(WeekViewEvent event, RectF eventRect);
+    }
+
+    public interface EventLongPressListener {
+        public void onEventLongPress(WeekViewEvent event, RectF eventRect);
     }
 }
