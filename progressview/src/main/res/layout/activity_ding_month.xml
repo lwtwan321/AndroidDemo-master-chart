@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.xinshiwi.power.progressview.newweek.WeekHeaderView
+        android:id="@+id/weekheaderview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_date"
+        app:firstDayOfWeek2="sunday"
+        app:headerBackgroundColor="#eeeeee"
+        app:headerDayLabelNormalTextColor="#000000"
+        app:headerDayLabelTextSize="20sp"
+        app:headerDayLabelTodayTextColor="@android:color/holo_red_dark"
+        app:headerFocusBackgroundColor="#ffffff"
+        app:headerFocusSameDayBackgroundColor="#ffffff"
+        app:headerFocusSameDayTextColor="#000000"
+        app:headerFocusTextColor="#000000"
+        app:headerPaddingTop="20dp"
+        app:headerRowGap="40dp"
+        app:headerWeekLabelTextColor="#000000"
+        app:headerWeekLabelTextSize="16sp" />
+
+    <com.xinshiwi.power.progressview.newweek.DingWeekDay
+        android:id="@+id/dingweekday"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -94,7 +94,7 @@ public class SecondActivity extends AppCompatActivity implements WeekDayView.Mon
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
         Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
+        startTime.set(Calendar.HOUR_OF_DAY, 9);
         startTime.set(Calendar.MINUTE, 0);
         startTime.set(Calendar.MONTH, newMonth - 1);
         startTime.set(Calendar.YEAR, newYear);
@@ -105,18 +105,18 @@ public class SecondActivity extends AppCompatActivity implements WeekDayView.Mon
         event.setColor(ColorUtil.getRandomColor());
         events.add(event);
 
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 4);
-        endTime.set(Calendar.MINUTE, 0);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        event = new WeekViewEvent(10, "22", startTime, endTime);
-        event.setColor(ColorUtil.getRandomColor());
-        events.add(event);
+//        startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 10);
+//        startTime.set(Calendar.MINUTE, 0);
+//        startTime.set(Calendar.MONTH, newMonth - 1);
+//        startTime.set(Calendar.YEAR, newYear);
+//        endTime = (Calendar) startTime.clone();
+//        endTime.set(Calendar.HOUR_OF_DAY, 4);
+//        endTime.set(Calendar.MINUTE, 0);
+//        endTime.set(Calendar.MONTH, newMonth - 1);
+//        event = new WeekViewEvent(10, "22", startTime, endTime);
+//        event.setColor(ColorUtil.getRandomColor());
+//        events.add(event);
 
         return events;
     }

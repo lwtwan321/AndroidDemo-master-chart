@@ -34,7 +34,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
@@ -149,22 +148,6 @@ public class WeekDayView extends View {
             mDistanceX = distanceX * mXScrollingSpeed;
             mDistanceY = distanceY;
             invalidate();
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//            mScroller.forceFinished(true);
-//            mStickyScroller.forceFinished(true);
-//
-//            if (mCurrentFlingDirection == Direction.HORIZONTAL){
-//                mScroller.fling((int) mCurrentOrigin.x, 0, (int) (velocityX * mXScrollingSpeed), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0);
-//            }
-//            else if (mCurrentFlingDirection == Direction.VERTICAL){
-//                mScroller.fling(0, (int) mCurrentOrigin.y, 0, (int) velocityY, 0, 0, (int) -(mHourHeight * 24 + mHeaderTextHeight + mHeaderRowPadding * 2 - getHeight()), 0);
-//            }
-//
-//            ViewCompat.postInvalidateOnAnimation(WeekNoHeaderView.this);
             return true;
         }
 
@@ -368,9 +351,6 @@ public class WeekDayView extends View {
         // Draw the time column and all the axes/separators.
         drawTimeColumnAndAxes(canvas);
 
-        // Hide everything in the first cell (top left corner).
-//        canvas.drawRect(0, 0, mTimeTextWidth + mHeaderColumnPadding * 2, 0, mHeaderBackgroundPaint);
-
         // Hide anything that is in the bottom margin of the header row.
         canvas.drawRect(mHeaderColumnWidth, 0, getWidth(), mHeaderMarginBottom + mTimeTextHeight / 2 - mHourSeparatorHeight / 2, mHeaderColumnBackgroundPaint);
     }
@@ -379,32 +359,23 @@ public class WeekDayView extends View {
         // Do not let the view go above/below the limit due to scrolling. Set the max and min limit of the scroll.
         if (mCurrentScrollDirection == Direction.VERTICAL) {
             if (mCurrentOrigin.y - mDistanceY > 0) mCurrentOrigin.y = 0;
-            else if (mCurrentOrigin.y - mDistanceY < -(mHourHeight * 24 + 0 - getHeight()))
-                mCurrentOrigin.y = -(mHourHeight * 24 + 0 - getHeight());
+            else if (mCurrentOrigin.y - mDistanceY < -(mHourHeight * 13 + 0 - getHeight()))
+                mCurrentOrigin.y = -(mHourHeight * 13 + 0 - getHeight());
             else mCurrentOrigin.y -= mDistanceY;
         }
 
         // Draw the background color for the header column.
         canvas.drawRect(0, 0, mHeaderColumnWidth, getHeight(), mHeaderColumnBackgroundPaint);
 
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 13; i++) {
             float top = 0 + mCurrentOrigin.y + mHourHeight * i + mHeaderMarginBottom;
-
+            int index = i + 8;
             // Draw the text if its y position is not outside of the visible area. The pivot point of the text is the point at the bottom-right corner.
-            String time = getDateTimeInterpreter().interpretTime(i);
+            String time = getDateTimeInterpreter().interpretTime(index);
             if (time == null)
                 throw new IllegalStateException("A DateTimeInterpreter must not return null time");
             if (top < getHeight())
                 canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top + mTimeTextHeight, mTimeTextPaint);
-        }
-        boolean sameDay = isSameDay(mSelectedDate, mToday);
-        if (sameDay) {
-            SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            String time = weekdayNameFormat.format(System.currentTimeMillis());
-            Calendar now = Calendar.getInstance();
-            now.setTimeInMillis(System.currentTimeMillis());
-            float top = (mHourHeight * 24 / 1440) * (60 * now.get(Calendar.HOUR_OF_DAY) + now.get(Calendar.MINUTE)) + mTimeTextHeight + mCurrentOrigin.y;
-            canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top, mCurrentTimeTextPaint);
         }
     }
 
@@ -413,32 +384,6 @@ public class WeekDayView extends View {
         mHeaderColumnWidth = mTimeTextWidth + mHeaderColumnPadding * 2;
         mWidthPerDay = getWidth() - mHeaderColumnWidth - mColumnGap * (mNumberOfVisibleDays - 1);
         mWidthPerDay = mWidthPerDay / mNumberOfVisibleDays;
-
-        if (mAreDimensionsInvalid) {
-            mAreDimensionsInvalid = false;
-            if (mScrollToDay != null)
-                goToDate(mScrollToDay);
-
-            mAreDimensionsInvalid = false;
-            if (mScrollToHour >= 0)
-                goToHour(mScrollToHour);
-
-            mScrollToDay = null;
-            mScrollToHour = -1;
-            mAreDimensionsInvalid = false;
-        }
-        if (mIsFirstDraw) {
-            mIsFirstDraw = false;
-
-            // If the week view is being drawn for the first time, then consider the first day of the week.
-            if (mNumberOfVisibleDays >= 7 && mToday.get(Calendar.DAY_OF_WEEK) != mFirstDayOfWeek) {
-                int difference = (7 + (mToday.get(Calendar.DAY_OF_WEEK) - mFirstDayOfWeek)) % 7;
-                mCurrentOrigin.x += (mWidthPerDay + mColumnGap) * difference;
-            }
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            goToHour(calendar.get(Calendar.HOUR_OF_DAY));
-        }
 
         // Consider scroll offset.
         if (mCurrentScrollDirection == Direction.HORIZONTAL) mCurrentOrigin.x -= mDistanceX;
@@ -492,17 +437,6 @@ public class WeekDayView extends View {
                 getMoreEvents(day);
                 mRefreshEvents = false;
             }
-            if (sameDay) {
-                SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                String time = weekdayNameFormat.format(System.currentTimeMillis());
-                Calendar now = Calendar.getInstance();
-                now.setTimeInMillis(System.currentTimeMillis());
-                float top = (mHourHeight * 24 / 1440) * (60 * now.get(Calendar.HOUR_OF_DAY) + now.get(Calendar.MINUTE)) + mTimeTextHeight + mCurrentOrigin.y;
-                Log.d(TAG, "drawTimeColumnAndAxes ===" + time);
-//                canvas.drawText(time, mTimeTextWidth + mHeaderColumnPadding, top, mCurrentTimeTextPaint);
-                canvas.drawLine(startPixel, top, startPixel + mWidthPerDay, top, mCurrentTimeTextPaint);
-            }
-
 
             // Draw background color for each day.
             float start = (startPixel < mHeaderColumnWidth ? mHeaderColumnWidth : startPixel);
@@ -510,7 +444,7 @@ public class WeekDayView extends View {
                 canvas.drawRect(start, mTimeTextHeight / 2 + mHeaderMarginBottom, startPixel + mWidthPerDay, getHeight(), sameDay ? mTodayBackgroundPaint : mDayBackgroundPaint);
             // Prepare the separator lines for hours.
             int i = 0;
-            for (int hourNumber = 0; hourNumber < 24; hourNumber++) {
+            for (int hourNumber = 0; hourNumber < 13; hourNumber++) {
                 float top = mCurrentOrigin.y + mHourHeight * hourNumber + mTimeTextHeight / 2 + mHeaderMarginBottom;
                 if (top > 0 + mTimeTextHeight / 2 + mHeaderMarginBottom - mHourSeparatorHeight && top < getHeight() && startPixel + mWidthPerDay - start > 0) {
                     hourLines[i * 4] = start;
@@ -530,26 +464,6 @@ public class WeekDayView extends View {
             // In the next iteration, start from the next day.
             startPixel += mWidthPerDay + mColumnGap;
         }
-
-        // Draw the header background.
-//        canvas.drawRect(0, 0, getWidth(), 0, mHeaderBackgroundPaint);
-
-        // Draw the header row texts.
-        startPixel = startFromPixel;
-//        for (int dayNumber=leftDaysWithGaps+1; dayNumber <= leftDaysWithGaps + mNumberOfVisibleDays + 1; dayNumber++) {
-//            // Check if the day is today.
-//            day = (Calendar) mToday.clone();
-//            day.add(Calendar.DATE, dayNumber - 1);
-//            boolean sameDay = isSameDay(day, mToday);
-//
-//            // Draw the day labels.
-//            String dayLabel = getDateTimeInterpreter().interpretDate(day);
-//            if (dayLabel == null)
-//                throw new IllegalStateException("A DateTimeInterpreter must not return null date");
-////            canvas.drawText(dayLabel, startPixel + mWidthPerDay / 2, mHeaderTextHeight + mHeaderRowPadding, sameDay ? mTodayHeaderTextPaint : mHeaderTextPaint);
-////            startPixel += mWidthPerDay + mColumnGap;
-//        }
-
     }
 
     /**
