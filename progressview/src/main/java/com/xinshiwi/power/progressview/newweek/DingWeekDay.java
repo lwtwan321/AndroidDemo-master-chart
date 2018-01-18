@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class DingWeekDay extends View {
                 for (DingWeekDay.EventRect event : reversedEventRects) {
                     if (event.rectF != null && e.getX() > event.rectF.left && e.getX() < event.rectF.right && e.getY() > event.rectF.top && e.getY() < event.rectF.bottom) {
                         eventClickListener.onEventClick(event.event, event.rectF);
+                        Toast.makeText(getContext(), "is click", Toast.LENGTH_SHORT).show();
                         return super.onSingleTapConfirmed(e);
                     }
                 }
@@ -116,7 +118,7 @@ public class DingWeekDay extends View {
 
     private int mHeaderColumnPadding = 16;
     private float mHeaderColumnWidth;
-    private float mWidthPerDay;
+    private float mBarWidth;
     private float mDistanceY = 0;
     private float mDistanceX = 0;
 
@@ -126,6 +128,7 @@ public class DingWeekDay extends View {
     private int beginHour = 8;
     private int endHour = 20;
     private int totalHour = 0;
+    private int mGapDesk = 40;
 
     private List<EventRect> mEventRects = new ArrayList<>();
     private Calendar mToday;
@@ -183,7 +186,6 @@ public class DingWeekDay extends View {
         // Prepare event background color.
         mEventBackgroundPaint = new Paint();
         mEventBackgroundPaint.setColor(Color.rgb(174, 208, 238));
-
     }
 
     @Override
@@ -200,10 +202,23 @@ public class DingWeekDay extends View {
     private void drawTimeColumnAndAxes(Canvas canvas) {
         // Do not let the view go above/below the limit due to scrolling. Set the max and min limit of the scroll.
         if (mCurrentScrollDirection == DingWeekDay.Direction.VERTICAL) {
-            if (mCurrentOrigin.y - mDistanceY > 0) mCurrentOrigin.y = 0;
-            else if (mCurrentOrigin.y - mDistanceY < -(mHourHeight * getTotalHour() + 0 - getHeight()))
+            if (mCurrentOrigin.y - mDistanceY > 0) {
+                mCurrentOrigin.y = 0;
+            } else if (mCurrentOrigin.y - mDistanceY < -(mHourHeight * getTotalHour() + 0 - getHeight())) {
                 mCurrentOrigin.y = -(mHourHeight * getTotalHour() + 0 - getHeight());
-            else mCurrentOrigin.y -= mDistanceY;
+            } else {
+                mCurrentOrigin.y -= mDistanceY;
+            }
+        } else if (mCurrentScrollDirection == DingWeekDay.Direction.HORIZONTAL) {
+            if (mTotalDeskBarWidth <= getWidth() - mHeaderColumnWidth) {
+                mCurrentOrigin.x = 0;
+            } else if (mCurrentOrigin.x - mDistanceX > 0) {
+                mCurrentOrigin.x = 0;
+            } else if (mCurrentOrigin.x - mDistanceX < -(mTotalDeskBarWidth - getWidth() + mHeaderColumnWidth)) {
+                mCurrentOrigin.x = -(mTotalDeskBarWidth - getWidth() + mHeaderColumnWidth);
+            } else {
+                mCurrentOrigin.x -= mDistanceX;
+            }
         }
 
         // Draw the background color for the header column.
@@ -221,15 +236,12 @@ public class DingWeekDay extends View {
         }
     }
 
+    private static final int EDESKBARWIDTH = 200;
+
+    private int mTotalDeskBarWidth = 0;
+
     private void drawHeaderRowAndEvents(Canvas canvas) {
         mHeaderColumnWidth = mTimeTextWidth + mHeaderColumnPadding * 2;
-        mWidthPerDay = getWidth() - mHeaderColumnWidth;
-
-        // Consider scroll offset.
-        if (mCurrentScrollDirection == DingWeekDay.Direction.HORIZONTAL) {
-            mCurrentOrigin.x -= mDistanceX;
-        }
-
         int lineCount = getTotalHour();
         float[] hourLines = new float[lineCount * 4];
         int start = (int) mHeaderColumnWidth;
@@ -238,16 +250,58 @@ public class DingWeekDay extends View {
             float top = mCurrentOrigin.y + mHourHeight * hourNumber + mTimeTextHeight / 2 + mHeaderMarginBottom;
             hourLines[i * 4] = start;
             hourLines[i * 4 + 1] = top;
-            hourLines[i * 4 + 2] = start + mWidthPerDay;
+            hourLines[i * 4 + 2] = start + getWidth() - mHeaderColumnWidth;
             hourLines[i * 4 + 3] = top;
             i++;
         }
 
-        // Draw the lines for hours.
         canvas.drawLines(hourLines, mHourSeparatorPaint);
 
-        // Draw the events.
-        drawEvents(Calendar.getInstance(), 0, canvas);
+        if (!mIsSingleBar) {
+            mTotalDeskBarWidth = (EDESKBARWIDTH + mGapDesk) * mEventRects.size();
+            mBarWidth = EDESKBARWIDTH;
+        } else {
+            mBarWidth = getWidth() - mHeaderColumnWidth;
+            mTotalDeskBarWidth = (int) mBarWidth;
+        }
+        addEvents();
+        drawEvents(Calendar.getInstance(), canvas);
+    }
+
+
+    private boolean mIsSingleBar = false;
+
+    public void setmIsSingleBar(boolean mIsSingleBar) {
+        this.mIsSingleBar = mIsSingleBar;
+    }
+
+
+    private void addEvents() {
+        mEventRects.clear();
+
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 9);
+//        startTime.set(Calendar.MINUTE, 30);
+//        Calendar endTime = (Calendar) startTime.clone();
+//        endTime.add(Calendar.HOUR, 1);
+//        endTime.add(Calendar.MINUTE, 30);
+//        WeekViewEvent event = new WeekViewEvent(1, "This is a Event!!", startTime, endTime);
+//        event.setColor(ColorUtil.getRandomColor());
+//        EventRect eventRect = new EventRect(event, null);
+//        computerEventRect(eventRect, 0);
+//        mEventRects.add(eventRect);
+
+        for (int i = 0; i < 10; i++) {
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.HOUR_OF_DAY, beginHour);
+            Calendar endTime = (Calendar) startTime.clone();
+            endTime.set(Calendar.HOUR_OF_DAY, endHour);
+            WeekViewEvent event = new WeekViewEvent(1, "This is a Event!!", startTime, endTime);
+            event.setColor(ColorUtil.getRandomColor());
+            EventRect eventRect = new EventRect(event, null);
+            computerEventRect(eventRect, i);
+            mEventRects.add(eventRect);
+        }
 
     }
 
@@ -255,33 +309,19 @@ public class DingWeekDay extends View {
      * 画事件
      *
      * @param date
-     * @param startFromPixel
      * @param canvas
      */
-    private void drawEvents(Calendar date, float startFromPixel, Canvas canvas) {
-        mEventRects.clear();
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 9);
-        startTime.set(Calendar.MINUTE, 30);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.add(Calendar.MINUTE, 30);
-        WeekViewEvent event = new WeekViewEvent(1, "This is a Event!!", startTime, endTime);
-        event.setColor(ColorUtil.getRandomColor());
-        EventRect eventRect = new EventRect(event, null);
-        computerEventRect(eventRect);
-        mEventRects.add(eventRect);
-
+    private void drawEvents(Calendar date, Canvas canvas) {
         if (mEventRects != null && mEventRects.size() > 0) {
             for (EventRect er : mEventRects) {
-                if (isSameDay(eventRect.getEvent().getStartTime(), date)) {
-                    canvas.drawRect(eventRect.getRectF(), mEventBackgroundPaint);
+                if (isSameDay(er.getEvent().getStartTime(), date)) {
+                    canvas.drawRect(er.getRectF(), mEventBackgroundPaint);
                 }
             }
         }
     }
 
-    private void computerEventRect(EventRect eventRect) {
+    private void computerEventRect(EventRect eventRect, int index) {
         int startHour = eventRect.getEvent().getStartTime().get(Calendar.HOUR_OF_DAY);
         int startMinutes = eventRect.getEvent().getStartTime().get(Calendar.MINUTE);
 
@@ -301,8 +341,12 @@ public class DingWeekDay extends View {
         }
 
         float top = 0 + mCurrentOrigin.y + mHeaderMarginBottom + mTimeTextHeight / 2 + relativePositionStart * mHourHeight + halfHeightStart;
-        float left = mCurrentOrigin.x + mHeaderColumnWidth;
-        float right = left + mWidthPerDay;
+        int gap = 0;
+        if (!mIsSingleBar) {
+            gap = mGapDesk;
+        }
+        float left = mCurrentOrigin.x + mHeaderColumnWidth + (gap + mBarWidth) * index;
+        float right = left + mBarWidth;
         float bottom = 0 + mCurrentOrigin.y + mHeaderMarginBottom + mTimeTextHeight / 2 + relativePositionEnd * mHourHeight + halfHeightEnd;
         RectF rectF = new RectF(left, top, right, bottom);
         eventRect.setRectF(rectF);
