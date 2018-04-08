@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <!--<com.xinshiwi.power.progressview.custom.DingViewGroup-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="#ff0000"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="30dp">-->
+
+    <!--<com.xinshiwi.power.progressview.custom.DingTextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:text="ding" />-->
+
+
+    <!--&lt;!&ndash;<com.xinshiwi.power.progressview.custom.DingView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+    <!--</com.xinshiwi.power.progressview.custom.DingViewGroup>-->
+
+    <com.xinshiwi.power.progressview.custom.PieView
+        android:id="@+id/aaa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

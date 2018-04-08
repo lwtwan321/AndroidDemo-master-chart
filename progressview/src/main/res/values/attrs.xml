@@ -51,16 +51,20 @@
         <attr name="headerWeekLabelTextColor" format="color" />
         <attr name="headerDayLabelNormalTextColor" format="color" />
         <attr name="headerDayLabelTodayTextColor" format="color" />
-        <attr name="headerBackgroundColor" format="color"/>
+        <attr name="headerBackgroundColor" format="color" />
         <attr name="headerColumnGap" format="dimension" />
         <attr name="headerRowGap" format="dimension" />
         <attr name="headerPaddingLeft" format="dimension" />
         <attr name="headerPaddingRight" format="dimension" />
         <attr name="headerPaddingTop" format="dimension" />
         <attr name="headerPaddingBottom" format="dimension" />
-        <attr name="headerFocusTextColor" format="color"/>
-        <attr name="headerFocusBackgroundColor" format="color"/>
-        <attr name="headerFocusSameDayBackgroundColor" format="color"/>
-        <attr name="headerFocusSameDayTextColor" format="color"/>
+        <attr name="headerFocusTextColor" format="color" />
+        <attr name="headerFocusBackgroundColor" format="color" />
+        <attr name="headerFocusSameDayBackgroundColor" format="color" />
+        <attr name="headerFocusSameDayTextColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="PieView">
+        <attr name="pieTextSize" format="dimension" />
     </declare-styleable>
 </resources>
