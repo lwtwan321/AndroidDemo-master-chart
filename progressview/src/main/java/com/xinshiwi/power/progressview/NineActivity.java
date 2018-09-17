@@ -1,0 +1,52 @@
+package com.xinshiwi.power.progressview;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import com.xinshiwi.power.progressview.view.UpAndDownSlidinglayout;
+
+public class NineActivity extends AppCompatActivity {
+
+
+    /**
+     * 双向滑动菜单布局
+     */
+    private UpAndDownSlidinglayout updownSldingLayout;
+
+    /**
+     * 在内容布局上显示的ListView
+     */
+    private ListView contentList;
+    private LinearLayout ll;
+    /**
+     * ListView的适配器
+     */
+    private ArrayAdapter<String> contentListAdapter;
+
+    /**
+     * 用于填充contentListAdapter的数据源。
+     */
+    private String[] contentItems = { "Content Item 1", "Content Item 2",
+            "Content Item 3", "Content Item 4", "Content Item 5",
+            "Content Item 6", "Content Item 7", "Content Item 8",
+            "Content Item 9", "Content Item 10", "Content Item 11",
+            "Content Item 12", "Content Item 13", "Content Item 14",
+            "Content Item 15", "Content Item 16" };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_nine);
+        ll = (LinearLayout) findViewById(R.id.content);
+        updownSldingLayout = (UpAndDownSlidinglayout) findViewById(R.id.updown_sliding_layout);
+        contentList = (ListView) findViewById(R.id.contentList);
+        contentListAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, contentItems);
+        contentList.setAdapter(contentListAdapter);
+        updownSldingLayout.setScrollEvent(ll);
+    }
+
+}

@@ -40,7 +40,9 @@
         <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity android:name=".newweek.SecondActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".newweek.SecondActivity"
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -56,35 +58,58 @@
         <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity android:name=".FourActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".FourActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 
 
-        <activity android:name=".FiveWebViewActivity" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".FiveWebViewActivity"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".SixRootView" android:screenOrientation="portrait">
-
-        </activity>
-
-
-        <activity android:name=".SevenStatusBarActivity" android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".EightCustomUIActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".SixRootView"
+            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".CircleCycleActivity" android:screenOrientation="portrait">
+
+        <activity
+            android:name=".SevenStatusBarActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".EightCustomUIActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".CircleCycleActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".TouchViewActivity"
+            android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".NineActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".TouchViewActivity" android:screenOrientation="portrait">
-
         </activity>
 
     </application>
